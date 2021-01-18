@@ -32,7 +32,7 @@ def square(list): #To return square of sum of derivatives
         return 0
 
 
-def gradient_descent(X, Y, bo, b1, eta=0.0001, tolerance=0.0001, epochs = 1, epsilon = 0.1, batch_size = 16):
+def gradient_descent(X, Y, bo, b1, eta=0.0001, tolerance=0.0001, epochs = 1, epsilon = 0.01, gamma = 0.95, batch_size = 16):
     prev_bo = 0
     prev_b1 = 0
 
@@ -54,10 +54,14 @@ def gradient_descent(X, Y, bo, b1, eta=0.0001, tolerance=0.0001, epochs = 1, eps
             dbo += derivatives[0]
             db1 += derivatives[1]
 
+        sqr = square(b1_values)
+
         dbo = np.mean(dbo)
         db1 = np.mean(db1)
 
-        eta_delta = eta / np.sqrt(square(b1_values) + epsilon)
+        weighted_avg_w = ((gamma * sqr) + (1 - gamma) * db1)
+
+        eta_delta = eta/np.sqrt(np.abs(weighted_avg_w) + epsilon)
 
 
 
